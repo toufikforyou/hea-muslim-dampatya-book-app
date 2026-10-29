@@ -1,5 +1,55 @@
 <resources>
     <string name="app_name">হে মুসলিম দাম্পত্য</string>
-    <string name="openNavigation">Open Navigation</string>
-    <string name="closeNavigation">Close Navigation</string>
+    <string name="book_tagline">অনুভূতির দ্বীন ডায়েরী…</string>
+    <string name="book_author">শাহরিন বিনতে ইসমাইল ইবনে আশরাফ</string>
+    <string name="book_cover">বইয়ের প্রচ্ছদ</string>
+
+    <string name="start_reading">পড়া শুরু করুন</string>
+    <string name="continue_reading">পড়া চালিয়ে যান</string>
+    <string name="last_read">সর্বশেষ পড়েছেন</string>
+    <string name="percent_read">%1$s%% পড়া হয়েছে</string>
+    <string name="chapter_done">পড়া শেষ</string>
+    <string name="chapter_a11y">অধ্যায় %1$s: %2$s</string>
+    <string name="section_contents">সূচিপত্র · %1$sটি অধ্যায়</string>
+    <string name="section_writer">লেখক সম্পর্কে</string>
+    <string name="about_writer_subtitle">লেখিকার সংক্ষিপ্ত পরিচিতি</string>
+    <string name="writer_words_subtitle">বইটি নিয়ে লেখিকার অনুভূতি</string>
+
+    <string name="salam">আসসালামু আলাইকুম</string>
+    <string name="welcome_message">বইটি পড়তে আসার জন্য আপনাকে আন্তরিক স্বাগতম।</string>
+    <string name="salam_reply">ওয়া আলাইকুমুস সালাম</string>
+
+    <string name="theme_title">অ্যাপের থিম</string>
+    <string-array name="theme_options">
+        <item>ফোনের সেটিং অনুযায়ী</item>
+        <item>আলো (লাইট)</item>
+        <item>রাত (ডার্ক)</item>
+    </string-array>
+    <string name="about_app">অ্যাপ সম্পর্কে</string>
+    <string name="about_app_message">সংস্করণ %1$s\n\nবইটি সম্পূর্ণ অফলাইনে পড়া যায়। আপনি যেখানে পড়া থামাবেন, পরের বার ঠিক সেখান থেকেই শুরু হবে।\n\nকোনো লাইন ভালো লাগলে সেটির উপর চেপে ধরে কপি করে নিতে পারেন।</string>
+    <string name="share_app">শেয়ার করুন</string>
+    <string name="share_text">\"হে মুসলিম দাম্পত্য\" বইটি পড়ুন: %1$s</string>
+    <string name="ok">ঠিক আছে</string>
+    <string name="cancel">বাতিল</string>
+
+    <string name="back">ফিরে যান</string>
+    <string name="chapter_of">অধ্যায় %1$s / %2$s</string>
+    <string name="reading_progress">পড়ার অগ্রগতি</string>
+    <string name="chapter_load_error">দুঃখিত, অধ্যায়টি খোলা যায়নি। আবার চেষ্টা করুন।</string>
+    <string name="chapter_end">— এই অংশ এখানেই শেষ —</string>
+    <string name="next_chapter">পরবর্তী: %1$s</string>
+    <string name="previous_chapter">আগের অধ্যায়</string>
+    <string name="back_to_contents">সূচিপত্র</string>
+    <string name="paragraph_copied">অনুচ্ছেদটি কপি হয়েছে</string>
+
+    <string name="reader_settings">পড়ার সেটিংস</string>
+    <string name="text_size">লেখার আকার</string>
+    <string name="text_smaller">লেখা ছোট করুন</string>
+    <string name="text_larger">লেখা বড় করুন</string>
+    <string name="reading_theme">পড়ার রং</string>
+    <string name="theme_auto">অটো</string>
+    <string name="theme_paper">সাদা</string>
+    <string name="theme_sepia">সেপিয়া</string>
+    <string name="theme_night">রাত</string>
+    <string name="keep_screen_on">পড়ার সময় স্ক্রিন চালু রাখুন</string>
 </resources>
