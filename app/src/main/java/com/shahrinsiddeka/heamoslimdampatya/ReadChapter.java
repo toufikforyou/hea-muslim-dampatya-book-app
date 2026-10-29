@@ -175,6 +175,8 @@ public class ReadChapter extends AppCompatActivity implements ParagraphAdapter.F
         ReaderColors colors = ReaderColors.resolve(this, prefs.getReaderTheme());
         root.setBackgroundColor(colors.background);
         appBar.setBackgroundColor(colors.background);
+        // Solid status bar area, so the toolbar never shows through it while it hides on scroll.
+        appBar.setStatusBarForegroundColor(colors.background);
         toolbar.setBackgroundColor(colors.background);
         toolbar.setTitleTextColor(colors.text);
         toolbar.setSubtitleTextColor(colors.secondaryText);

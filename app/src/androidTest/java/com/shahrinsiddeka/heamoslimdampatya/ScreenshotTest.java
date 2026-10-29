@@ -17,6 +17,8 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.android.material.appbar.AppBarLayout;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -51,7 +53,10 @@ public class ScreenshotTest {
             onView(withId(R.id.textSizeSlider)).check(matches(isDisplayed()));
             pressBack();
             // Scroll in code: a swipe starting at the bottom edge would trigger the system home gesture.
-            reader.onActivity(activity -> ((RecyclerView) activity.findViewById(R.id.recyclerView)).scrollBy(0, 2500));
+            reader.onActivity(activity -> {
+                ((RecyclerView) activity.findViewById(R.id.recyclerView)).scrollBy(0, 2500);
+                ((AppBarLayout) activity.findViewById(R.id.appBar)).setExpanded(false, false);
+            });
             capture("05_reader_scrolled");
         }
 
@@ -72,6 +77,8 @@ public class ScreenshotTest {
         }
         try (ActivityScenario<ReadChapter> ignored = ActivityScenario.launch(ReadChapter.intent(context, "1", title))) {
             capture("09_reader_dark");
+            ignored.onActivity(activity -> ((AppBarLayout) activity.findViewById(R.id.appBar)).setExpanded(false, false));
+            capture("10_reader_dark_scrolled");
         }
         InstrumentationRegistry.getInstrumentation().runOnMainSync(() ->
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM));
