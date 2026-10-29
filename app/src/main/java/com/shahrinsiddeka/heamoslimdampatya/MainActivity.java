@@ -1,135 +1,132 @@
 package com.shahrinsiddeka.heamoslimdampatya;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.shahrinsiddeka.heamoslimdampatya.MainAdapter.ChapterClick;
-import com.shahrinsiddeka.heamoslimdampatya.MainAdapter.ChapterModel;
-import com.shahrinsiddeka.heamoslimdampatya.MainAdapter.RecyclerAdapterView;
+import com.shahrinsiddeka.heamoslimdampatya.MainAdapter.HomeAdapter;
 
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements ChapterClick, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements ChapterClick {
 
-    RecyclerAdapterView recyclerAdapterView;
-    RecyclerView recyclerView;
+    private static final int[] NIGHT_MODES = {
+            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
+            AppCompatDelegate.MODE_NIGHT_NO,
+            AppCompatDelegate.MODE_NIGHT_YES
+    };
 
-    ArrayList<ChapterModel> chapterModels;
-
-    DrawerLayout drawerLayoutNavigation;
-    NavigationView navigationView;
-    ActionBarDrawerToggle toggle;
-
-    MaterialToolbar materialToolbar;
+    private HomeAdapter homeAdapter;
+    private ReadingPrefs prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        // TODO: Toggle Menu
-        drawerLayoutNavigation = findViewById(R.id.drawerLayoutMain);
+        prefs = new ReadingPrefs(this);
 
-        materialToolbar = findViewById(R.id.toolbar);
-        navigationView = findViewById(R.id.navigation_menu_view);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        setSupportActionBar(materialToolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(true);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        homeAdapter = new HomeAdapter(this, this);
+        recyclerView.setAdapter(homeAdapter);
+        Insets.padBottom(recyclerView);
 
-        // Drawable Navigation Show Toggle
-        toggle = new ActionBarDrawerToggle(this, drawerLayoutNavigation, materialToolbar, R.string.openNavigation, R.string.closeNavigation);
-        drawerLayoutNavigation.addDrawerListener(toggle);
-        toggle.syncState();
+        if (savedInstanceState == null) {
+            greetOncePerDay();
+        }
+    }
 
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.google_justify_icon);
-
-        navigationView.setNavigationItemSelectedListener(this);
-
-
-        showStartUp();
-
-        chapterModels = new ArrayList<>();
-        chapterModels.add(new ChapterModel("স্বামী স্ত্রীর সম্পর্ক", "1"));
-        chapterModels.add(new ChapterModel("মহব্বাত", "2"));
-        chapterModels.add(new ChapterModel("পরিবারের পর্দা", "3"));
-        chapterModels.add(new ChapterModel("দায়িত্ব", "4"));
-        chapterModels.add(new ChapterModel("সংসার জীবন", "5"));
-        chapterModels.add(new ChapterModel("বৈশিষ্ট্য অনুযায়ী দাম্পত্য", "6"));
-        chapterModels.add(new ChapterModel("আদর্শ দাম্পত্য", "7"));
-        chapterModels.add(new ChapterModel("আদর্শ মা- বাবা হোন", "8"));
-        chapterModels.add(new ChapterModel("সন্তান সন্ততি", "9"));
-        chapterModels.add(new ChapterModel("বিবাহ বিচ্ছেদ", "10"));
-        chapterModels.add(new ChapterModel("পুরুষের বহু বিবাহ", "11"));
-        chapterModels.add(new ChapterModel("এক নজরে", "12"));
-
-        // Initialize RecyclerView
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this)); // Set a layout manager (e.g., LinearLayoutManager)
-
-        // Create and set Adapter
-        recyclerAdapterView = new RecyclerAdapterView(chapterModels, this);
-        recyclerView.setAdapter(recyclerAdapterView);
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        homeAdapter.refreshProgress();
     }
 
     @Override
     public void onClick(String file, String title) {
-        Bundle bundle = new Bundle();
-        bundle.putString("title", title);
-        bundle.putString("file", file);
-        Intent intent = new Intent(this, ReadChapter.class);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        startActivity(ReadChapter.intent(this, file, title));
     }
 
-    public void showStartUp() {
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.salam);
-        dialog.setCancelable(true);
-
-        ImageView close = dialog.findViewById(R.id.salamImage);
-        close.setOnClickListener(v -> dialog.dismiss());
-        dialog.show();
+    private void greetOncePerDay() {
+        Calendar now = Calendar.getInstance();
+        long day = now.get(Calendar.YEAR) * 1000L + now.get(Calendar.DAY_OF_YEAR);
+        if (!prefs.shouldGreetToday(day)) {
+            return;
+        }
+        new MaterialAlertDialogBuilder(this)
+                .setView(R.layout.dialog_salam)
+                .setPositiveButton(R.string.salam_reply, null)
+                .show();
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.home_menu) {
-            if (drawerLayoutNavigation.isDrawerOpen(GravityCompat.START)) {
-                drawerLayoutNavigation.closeDrawer(GravityCompat.START);
-            }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_theme) {
+            showThemeDialog();
             return true;
-        } else if (item.getItemId() == R.id.about_writer) {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", "লেখকের পরিচয়");
-            bundle.putString("file", "0");
-            Intent intent = new Intent(this, ReadChapter.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
-        } else if (item.getItemId() == R.id.about_info) {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", "লেখকের কথা");
-            bundle.putString("file", "110");
-            Intent intent = new Intent(this, ReadChapter.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
+        } else if (item.getItemId() == R.id.action_about) {
+            showAboutDialog();
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showThemeDialog() {
+        int current = 0;
+        for (int i = 0; i < NIGHT_MODES.length; i++) {
+            if (NIGHT_MODES[i] == prefs.getNightMode()) {
+                current = i;
+            }
+        }
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.theme_title)
+                .setSingleChoiceItems(R.array.theme_options, current, (dialog, which) -> {
+                    prefs.setNightMode(NIGHT_MODES[which]);
+                    dialog.dismiss();
+                    AppCompatDelegate.setDefaultNightMode(NIGHT_MODES[which]);
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void showAboutDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.app_name)
+                .setMessage(getString(R.string.about_app_message, BuildConfig.VERSION_NAME))
+                .setPositiveButton(R.string.ok, null)
+                .setNeutralButton(R.string.share_app, (dialog, which) -> shareApp())
+                .show();
+    }
+
+    private void shareApp() {
+        Intent share = new Intent(Intent.ACTION_SEND)
+                .setType("text/plain")
+                .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text,
+                        "https://play.google.com/store/apps/details?id=" + getPackageName()));
+        startActivity(Intent.createChooser(share, getString(R.string.share_app)));
     }
 }

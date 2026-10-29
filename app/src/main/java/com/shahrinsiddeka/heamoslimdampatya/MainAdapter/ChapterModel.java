@@ -1,8 +1,8 @@
 package com.shahrinsiddeka.heamoslimdampatya.MainAdapter;
 
 public class ChapterModel {
-    private String title;
-    private String fileName;
+    private final String title;
+    private final String fileName;
 
     public ChapterModel(String title, String fileName) {
         this.title = title;
